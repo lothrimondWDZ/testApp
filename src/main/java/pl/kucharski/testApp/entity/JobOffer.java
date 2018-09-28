@@ -5,7 +5,17 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import pl.kucharski.testApp.enums.JobCategory;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -17,13 +27,16 @@ public class JobOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Job offer title cannot be null")
     @Column(name = "TITLE", nullable = false)
     private String title;
 
+    @NotNull(message = "Job category cannot be null")
     @Enumerated(EnumType.STRING)
     @Column(name = "JOB_CATEGORY", nullable = false)
     private JobCategory jobCategory;
 
+    @NotNull(message = "Job offer valid from date cannot be null")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @Column(name = "VALID_FROM", nullable = false)
     private LocalDate validFrom;
@@ -32,6 +45,7 @@ public class JobOffer {
     @Column(name = "VALID_TO")
     private LocalDate validTo;
 
+    @NotNull(message = "Employer name cannot be null")
     @Column(name = "EMPLOYER_NAME", nullable = false)
     private String employerName;
 

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "64436380-30f1-41f9-b1ec-827f70cbac1d",
+		"_postman_id": "e8877c22-acb8-4164-ab70-a4b7149cf849",
 		"name": "testApp",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -8,9 +8,22 @@
 		{
 			"name": "getFilteredJobs",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTM4MTQyMTU5LCJleHAiOjE1Mzg3NDY5NTl9._rMdhAn0C7L9DMS-BdL33o32pEsC7VT_sHy4lrQleJs3D7jhB8RovlD-EDb1R-0wwHdzq3m809PR8kuMqkvwSA",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "localhost:8080/job?userId=&categoryName=&page=0&size=10",
 					"host": [
@@ -54,7 +67,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": " {\n    \"title\": \"Tester needed\",\n    \"jobCategory\": \"IT\",\n    \"validFrom\": \"2018-09-30\",\n    \"validTo\": \"2018-10-14\",\n    \"employerName\": \"The IT Company\",\n    \"owner\": 1\n}"
+					"raw": " {\n    \"title\": \"Tester needed\",\n    \"jobCategory\": \"IT\",\n    \"validFrom\": \"2018-09-30\",\n    \"validTo\": \"2018-10-14\",\n    \"employerName\": \"The IT Company\",\n    \"owner\": {\n\t    \"id\": 1,\n\t    \"login\": \"iwo\",\n\t    \"password\": \"123\",\n\t    \"creationDate\": \"2018-09-28T10:36:31.472\"\n\t}\n}"
 				},
 				"url": {
 					"raw": "localhost:8080/job",
@@ -74,7 +87,10 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "localhost:8080/user?page=0&size=10",
 					"host": [
@@ -101,9 +117,22 @@
 		{
 			"name": "getUserById",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTM4MTQyMTA1LCJleHAiOjE1Mzg3NDY5MDV9.myuI0DB56d7lg1-fxG-0X-axlnashglvjyI-U63n6jJ6HsCVQ8mAygnzKvbRErZLU5WE0m4HFEf-R3k2Y7gK_Q",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "localhost:8080/user/1",
 					"host": [
@@ -121,6 +150,16 @@
 		{
 			"name": "createUser",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTM4MTQyMTU5LCJleHAiOjE1Mzg3NDY5NTl9._rMdhAn0C7L9DMS-BdL33o32pEsC7VT_sHy4lrQleJs3D7jhB8RovlD-EDb1R-0wwHdzq3m809PR8kuMqkvwSA",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -130,7 +169,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"login\": \"testUser\",\n    \"password\": \"testPass\",\n    \"creationDate\": \"2018-09-28T10:18:23.3\",\n    \"authorities\": [\n        {\n            \"authoritiesKey\": {\n                \"login\": \"testUser\",\n                \"role\": \"COMPANY\"\n            },\n            \"enabled\": true\n        }\n    ]\n}"
+					"raw": "{\n    \"login\": \"testUser2\",\n    \"password\": \"testPass2\",\n    \"creationDate\": \"2018-09-28T10:18:23.3\",\n    \"authorities\": [\n        {\n            \"authoritiesKey\": {\n                \"login\": \"testUser\",\n                \"role\": \"COMPANY\"\n            },\n            \"enabled\": true\n        }\n    ]\n}"
 				},
 				"url": {
 					"raw": "localhost:8080/user",
@@ -177,7 +216,10 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "localhost:8080/user/1",
 					"host": [
@@ -187,6 +229,33 @@
 					"path": [
 						"user",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"login\": \"iwo\",\n\t\"password\": \"123\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
 					]
 				}
 			},

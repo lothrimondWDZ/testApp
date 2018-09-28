@@ -8,11 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.kucharski.testApp.entity.JobOffer;
 import pl.kucharski.testApp.entity.QJobOffer;
-import pl.kucharski.testApp.entity.User;
 import pl.kucharski.testApp.enums.JobCategory;
 import pl.kucharski.testApp.repository.JobOfferRepository;
 
-import java.util.List;
 import java.util.Objects;
 
 @Service

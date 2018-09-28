@@ -3,65 +3,87 @@ package pl.kucharski.testApp.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import pl.kucharski.testApp.configuration.security.JwtAuthenticationEntryPoint;
+import pl.kucharski.testApp.configuration.security.JwtAuthenticationFilter;
+import pl.kucharski.testApp.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+	@Autowired
+	CustomUserDetailsService customUserDetailsService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .anyRequest().permitAll();
-//                .antMatchers("/", "/home", "/jobOffers", "/h2").permitAll()
-//                .antMatchers("/users").hasRole("ADMIN")
-//                .antMatchers("/jobOffers/create").hasRole("COMPANY")
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .permitAll();
+	@Autowired
+	private JwtAuthenticationEntryPoint unauthorizedHandler;
 
-        http.exceptionHandling().accessDeniedPage("/403");
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
-    }
+	@Bean
+	public JwtAuthenticationFilter jwtAuthenticationFilter() {
+		return new JwtAuthenticationFilter();
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		//        http
+		//                .authorizeRequests()
+		////                .anyRequest().permitAll();
+		//                .antMatchers("/").permitAll()
+		//                .antMatchers("/users", "/h2").hasRole("ADMIN")
+		//                .antMatchers("/jobOffers/create").hasRole("COMPANY")
+		//                .anyRequest().authenticated()
+		//                .and()
+		//                .formLogin()
+		//                .loginPage("/login")
+		//                .permitAll()
+		//                .and()
+		//                .logout()
+		//                .permitAll();
+		//
+		//        http.exceptionHandling().accessDeniedPage("/403");
+		//        http.csrf().disable();
+		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.antMatchers("/", "/login").permitAll()
+				.antMatchers(HttpMethod.GET, "/user/**").fullyAuthenticated()
+				.antMatchers("/user/**", "/h2").hasAuthority("ADMIN")
+				.antMatchers(HttpMethod.POST, "/job/**").hasAuthority("COMPANY")
+				.antMatchers(HttpMethod.GET, "/job/**").fullyAuthenticated()
+				.anyRequest().authenticated();
 
-    @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+		// Add our custom JWT security filter
+		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.headers().frameOptions().disable();
+	}
 
-        auth.jdbcAuthentication().dataSource(jdbcTemplate.getDataSource())
-                .usersByUsernameQuery(
-                        "select login, password, true from T_USER where login=?")
-                .authoritiesByUsernameQuery(
-                        "select login, role, enabled from T_AUTHORITIES where login=? AND enabled=true")
-                .passwordEncoder(passwordEncoder());
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return NoOpPasswordEncoder.getInstance();
+	}
 
-    @Bean
-    @Override
-    public JdbcUserDetailsManager userDetailsService() {
-        JdbcUserDetailsManager manager = new JdbcUserDetailsManager();
-        manager.setJdbcTemplate(jdbcTemplate);
-        return manager;
-    }
+	@Override
+	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+	}
+
+	@Bean(BeanIds.AUTHENTICATION_MANAGER)
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
 }
