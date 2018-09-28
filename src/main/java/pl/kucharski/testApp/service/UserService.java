@@ -1,6 +1,8 @@
 package pl.kucharski.testApp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.kucharski.testApp.entity.User;
 import pl.kucharski.testApp.repository.UserRepository;
@@ -24,13 +26,14 @@ public class UserService {
 
     public void delete(Long id) {
         User u = userRepository.getOne(id);
-        if (Objects.isNull(u)) {
-            throw new IllegalArgumentException("User does not exist in database");
-        }
         userRepository.delete(u);
     }
 
     public User update(User user) {
         return userRepository.save(user);
+    }
+
+    public Page<User> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }

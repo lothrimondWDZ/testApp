@@ -1,0 +1,196 @@
+{
+	"info": {
+		"_postman_id": "64436380-30f1-41f9-b1ec-827f70cbac1d",
+		"name": "testApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getFilteredJobs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/job?userId=&categoryName=&page=0&size=10",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"job"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": ""
+						},
+						{
+							"key": "categoryName",
+							"value": ""
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createJobOffer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n    \"title\": \"Tester needed\",\n    \"jobCategory\": \"IT\",\n    \"validFrom\": \"2018-09-30\",\n    \"validTo\": \"2018-10-14\",\n    \"employerName\": \"The IT Company\",\n    \"owner\": 1\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/job",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUsersWithPagination",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/user?page=0&size=10",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/user/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"login\": \"testUser\",\n    \"password\": \"testPass\",\n    \"creationDate\": \"2018-09-28T10:18:23.3\",\n    \"authorities\": [\n        {\n            \"authoritiesKey\": {\n                \"login\": \"testUser\",\n                \"role\": \"COMPANY\"\n            },\n            \"enabled\": true\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/user",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 2,\n    \"login\": \"testUser\",\n    \"password\": \"testPass2\",\n    \"creationDate\": \"2018-09-28T10:18:23.3\",\n    \"authorities\": [\n        {\n            \"authoritiesKey\": {\n                \"login\": \"testUser\",\n                \"role\": \"COMPANY\"\n            },\n            \"enabled\": true\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/user",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteUser",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/user/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

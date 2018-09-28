@@ -1,6 +1,8 @@
 package pl.kucharski.testApp.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +15,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping(path = "/user", method = RequestMethod.GET)
+    public ResponseEntity getAll(Pageable pageable) {
+        Page<User> u = userService.getAll(pageable);
+        return ResponseEntity.ok(u);
+    }
+
     @RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity get(@PathVariable("id") Long id) {
         User u = userService.get(id);
-        System.out.println(u);
         return ResponseEntity.ok(u);
     }
 

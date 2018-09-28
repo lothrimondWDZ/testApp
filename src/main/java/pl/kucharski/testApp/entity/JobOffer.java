@@ -1,5 +1,8 @@
 package pl.kucharski.testApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import pl.kucharski.testApp.enums.JobCategory;
 
 import javax.persistence.*;
@@ -14,21 +17,28 @@ public class JobOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TITLE")
+    @Column(name = "TITLE", nullable = false)
     private String title;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "JOB_CATEGORY")
+    @Column(name = "JOB_CATEGORY", nullable = false)
     private JobCategory jobCategory;
 
-    @Column(name = "VALID_FROM")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @Column(name = "VALID_FROM", nullable = false)
     private LocalDate validFrom;
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     @Column(name = "VALID_TO")
     private LocalDate validTo;
 
-    @Column(name = "EMPLOYER_NAME")
+    @Column(name = "EMPLOYER_NAME", nullable = false)
     private String employerName;
+
+    @JsonBackReference("jobs")
+    @ManyToOne
+    @JoinColumn(name = "OWNER_ID")
+    private User owner;
 
     public JobOffer() {
     }
@@ -79,6 +89,14 @@ public class JobOffer {
 
     public void setEmployerName(String employerName) {
         this.employerName = employerName;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     @Override

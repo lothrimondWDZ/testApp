@@ -23,17 +23,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/jobOffers").permitAll()
-                .antMatchers("/users").hasRole("ADMIN")
-                .antMatchers("/jobOffers/create").hasRole("COMPANY")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll();
+                .anyRequest().permitAll();
+//                .antMatchers("/", "/home", "/jobOffers", "/h2").permitAll()
+//                .antMatchers("/users").hasRole("ADMIN")
+//                .antMatchers("/jobOffers/create").hasRole("COMPANY")
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .permitAll();
 
         http.exceptionHandling().accessDeniedPage("/403");
         http.csrf().disable();
