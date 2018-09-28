@@ -39,23 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		//        http
-		//                .authorizeRequests()
-		////                .anyRequest().permitAll();
-		//                .antMatchers("/").permitAll()
-		//                .antMatchers("/users", "/h2").hasRole("ADMIN")
-		//                .antMatchers("/jobOffers/create").hasRole("COMPANY")
-		//                .anyRequest().authenticated()
-		//                .and()
-		//                .formLogin()
-		//                .loginPage("/login")
-		//                .permitAll()
-		//                .and()
-		//                .logout()
-		//                .permitAll();
-		//
-		//        http.exceptionHandling().accessDeniedPage("/403");
-		//        http.csrf().disable();
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.antMatchers("/", "/login").permitAll()
@@ -65,7 +48,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, "/job/**").fullyAuthenticated()
 				.anyRequest().authenticated();
 
-		// Add our custom JWT security filter
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		http.headers().frameOptions().disable();
 	}

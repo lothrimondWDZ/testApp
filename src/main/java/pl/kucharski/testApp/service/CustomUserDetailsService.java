@@ -20,13 +20,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Transactional
 	public UserDetails loadUserByUsername(String login)
 			throws UsernameNotFoundException {
-		// Let people login with either username or email
 		User user = userRepository.findByLogin(login);
-
 		return UserPrincipal.create(user);
 	}
 
-	// This method is used by JWTAuthenticationFilter
 	@Transactional
 	public UserDetails loadUserById(Long id) {
 		User user = userRepository.findById(id).orElseThrow(
